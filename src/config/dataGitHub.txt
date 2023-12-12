@@ -1,0 +1,11 @@
+Configuracion de Passport-github
+
+URL: http://localhost:8082/api/viewsUser/authgithub
+
+Owned by: @Gabriela2706
+
+App ID: 385530
+
+Client ID: Iv1.dde9419804abf4e4
+
+SECRET: 04a5adc86c0ded9893b9168123dde497bf58d5fb
