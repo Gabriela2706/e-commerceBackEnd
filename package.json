@@ -5,12 +5,17 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "nodemon src/app.js"
+    "start": "nodemon src/app.js",
+    "performance": "artillery run ./src/testing/configTests.yaml -o ./src/testing/cd.json",
+    "report": "artillery report ./src/testing/cd.json"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@faker-js/faker": "^8.3.1",
+    "artillery": "^2.0.3",
+    "artillery-plugin-metrics-by-endpoint": "^1.2.0",
     "bcrypt": "^5.1.1",
     "body-parser": "^1.20.2",
     "connect-mongo": "^5.1.0",
@@ -25,6 +30,7 @@
     "passport": "^0.7.0",
     "passport-github2": "^0.1.12",
     "passport-jwt": "^4.0.1",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "winston": "^3.11.0"
   }
 }

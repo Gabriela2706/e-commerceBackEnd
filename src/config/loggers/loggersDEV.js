@@ -1,17 +1,19 @@
+//va a mostrar por consola ERROR / HTTP / INFO
+
 import { createLogger, format, transports, addColors } from "winston";
 
 const { simple, colorize } = format;
 
 const levels = {
-  DANGER: 1,
-  WARN: 1,
-  INFO: 2,
+  ERROR: 1,
+  HTTP: 2,
+  INFO: 3,
 };
 
 const colors = {
-  DANGER: "red",
-  WARN: "yellow",
-  INFO: "blue",
+  ERROR: "red",
+  HTTP: "blue",
+  INFO: "yellow",
 };
 
 addColors(colors);
@@ -21,14 +23,8 @@ export default createLogger({
   format: colorize(),
   transports: [
     new transports.Console({
-      level: "WARN",
+      level: "ERROR",
       format: simple(),
-    }),
-
-    new transports.File({
-      level: "DANGER",
-      format: simple(),
-      filename: "./errorsDanger.log",
     }),
   ],
 });

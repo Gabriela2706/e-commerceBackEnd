@@ -38,12 +38,12 @@ function formRegister() {
     info.forEach((valor, llave) => (data[llave] = valor));
     console.log(data);
 
-    const res = await fetch("users/register", {
+    const res = await fetch("http://localhost:8080/users/register", {
       method: "POST",
-      body: JSON.stringify(data),
       headers: {
         "Content-Type": "application/json",
       },
+      body: JSON.stringify(data),
     });
 
     const resInfo = await res.json();

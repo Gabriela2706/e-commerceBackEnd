@@ -1,0 +1,19 @@
+config:
+  pluggins:
+    metrics-by-endpoint: {}
+  target: http://localhost:8080/test/
+  phases:
+    - duration: 20
+      arrivalRate: 10
+scenarios:
+  - name: creacion y eliminacion de un producto
+    flow:
+      - log: creacion de un producto
+      - post:
+          url: /create
+          capure:
+            - json: "$.response._id"
+              as: "pid"
+      - log: eliminacion de un producto
+      - delete:
+          url: /delete/{{pid}}

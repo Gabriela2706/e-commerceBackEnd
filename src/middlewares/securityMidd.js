@@ -2,10 +2,14 @@
 export const adminView = (req, res, next) => {
   try {
     const admin = req.email == "admincoder@coder.com" ? "admin" : "visit";
-    res.status(200).send({ error: false, admin });
+    res.status(200).send({ responde: admin });
     next();
   } catch (e) {
-    res.status(403).send({ error: true, msg: e.message });
+    return res.status(500).json({
+      message: error.message,
+      response: false,
+      from: "Desde el Midd de vista de administrador",
+    });
   }
 };
 
@@ -15,6 +19,10 @@ export const userView = (req, res, next) => {
     res.status(200).send({ error: false, admin });
     next();
   } catch (e) {
-    res.status(403).send({ error: true, msg: e.message });
+    return res.status(500).json({
+      message: error.message,
+      response: false,
+      from: "Desde el Midd de vista de usuario",
+    });
   }
 };

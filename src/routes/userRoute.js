@@ -3,8 +3,15 @@ import * as userController from "../controllers/userController.js";
 import passport from "passport";
 
 const userRoute = Router();
-
-userRoute.post("/register", userController.postRegister);
+//register con passport
+// userRoute.post(
+//   "/register",
+//   passport.authenticate("register", {
+//     successRedirect: "/users/login",
+//     failureRedirect: "/users/error",
+//   }),
+//   userController.postRegister
+// );
 
 //login con estrategia local
 userRoute.post(

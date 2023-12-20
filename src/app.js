@@ -15,6 +15,12 @@ import initLocalStrategy from "./config/passport.js";
 import bodyParser from "body-parser";
 import handlebars from "express-handlebars";
 import viewsUser from "./routes/viewsRoutes/userViewsRoute.js";
+import { LoggerDEV, LoggerPROD } from "./middlewares/loggerWinston.js";
+import {
+  errorLoggerDEV,
+  errorLoggerPROD,
+} from "./middlewares/errorHandlerDefault.js";
+import viewsProduct from "./routes/viewsRoutes/productViewsRoute.js";
 
 const app = express();
 //CONEXON CON MONGOOSE ATLAS
@@ -38,6 +44,7 @@ app.use(
     ttl: 3000,
   })
 );
+app.use(LoggerPROD, LoggerDEV);
 
 //CONFIGURACOON DE HANDLEBARS
 app.engine("handlebars", handlebars.engine());
@@ -51,7 +58,10 @@ app.use("/api/tickets", ticketRouter);
 app.use("/api/payments", paymentRoute);
 app.use("/api/auth", userRoute);
 app.use("/users", viewsUser);
+app.use("/products", viewsProduct);
 
+//MIDDLEWARS MANEJO DE ERRORES
+app.use(errorLoggerPROD, errorLoggerDEV);
 //CONTENIDO ESTATICO
 //app.use(express.static(path.join(__dirname + "../public")));
 
