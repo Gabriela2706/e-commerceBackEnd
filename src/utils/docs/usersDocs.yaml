@@ -1,0 +1,131 @@
+components:
+  schemas:
+    register:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Nombre del usuario
+        lastname:
+          type: string
+          description: Apellido del usuario
+        email:
+          type: string
+          description: Email del usuario
+        age:
+          type: number
+          description: Edad del usuario
+        password:
+          type: string
+          description: Contraseña del usuario (mínimo 6 caracteres)
+        cart:
+          type: object
+          description: Carrito del compras del usuario
+        role:
+          type: string
+          description: Rol del usuario (p. ej., "visit" o "admin")
+      example:
+        name: Gabriela
+        lastname: Toledo
+        email: gabi@coder123.com
+        age: 32
+        password: 12345
+        cart: []
+        role: visit
+    Login:
+      type: object
+      properties:
+        email:
+          type: string
+          description: Email del usuario
+        password:
+          type: string
+          description: Contraseña del usuario
+      example:
+        email: gabi@coder123.com
+        password: 12345
+  responses:
+    register:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Estado de la respuesta
+        payload:
+          type: string
+          description: id del usuario recien registrado
+      example:
+        status: success
+        payload: idDelNuevoUser
+    login:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Estado de la respuesta
+        message:
+          type: string
+          description: mensaje de la solicitud de login
+      example:
+        status: success
+        message: Login exitoso!
+
+paths:
+  /api/auth/register:
+    post:
+      summary: Registrar un usuario
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        description: Objeto con los datos necesarios para el registro de un nuevo usuario
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/register"
+      responses:
+        "201":
+          description: Exito en el registro del usuario nuevo
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/register"
+        "400":
+          description: Error en la solicitud debido a datos incorrectos o incompletos
+        "401":
+          description: No autorizado, credenciales inválidas
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/error"
+        "500":
+          description: Error interno del servidor
+  /api/auth/login:
+    post:
+      summary: Iniciar sesion de un usuario ya registrado
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        description: Objeto con los datos necesarios para el registro de un nuevo usuario
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/login"
+      responses:
+        "200":
+          description: Exito en el inicio de sesion de un usuario
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/login"
+        "400":
+          description: Error en la solicitud debido a datos incorrectos o incompletos
+        "401":
+          description: No autorizado, credenciales inválidas
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/error"
+        "500":
+          description: Error interno del servidor

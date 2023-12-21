@@ -44,11 +44,11 @@ viewsUser.get("/register", async (req, res) => {
 
 viewsUser.post(
   "/register",
-  passport.authenticate("register", {
-    successRedirect: " /users/login",
-    //failureRedirect: "/users/error",
-    failureMessage: "Error en la auth",
-  }),
+  // passport.authenticate("register", {
+  //   successRedirect: " /users/login",
+  //   //failureRedirect: "/users/error",
+  //   failureMessage: "Error en la auth",
+  // }),
   userController.postRegister
 );
 

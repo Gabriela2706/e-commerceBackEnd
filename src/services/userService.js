@@ -7,8 +7,8 @@ const userDB = new UserDAO();
 export const newRegister = async (user) => {
   try {
     //validacion de si existe el email
-    const emailExist = await userDB.findOne(user.email);
-    if (emailExist) return "Email ya registrado";
+    // const emailExist = await userDB.findOne(user.email);
+    // if (emailExist) return "Email ya registrado";
     // condiciones del registro: Role, generacion de la salt, hasheo del pass
     user.role = user.email == "admincoder@coder.com" ? "admin" : "visit";
     const salt = await bcrypt.genSalt(10);

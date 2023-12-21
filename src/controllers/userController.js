@@ -2,6 +2,7 @@ import * as userService from "../services/userService.js";
 
 export const postRegister = async (req, res) => {
   try {
+    console.log("Llego al controler");
     const { name, lastName, email, age, password } = req.body;
     const register = await userService.newRegister({
       name,

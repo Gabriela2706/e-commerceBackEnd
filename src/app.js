@@ -14,6 +14,8 @@ import passport from "passport";
 import initLocalStrategy from "./config/passport.js";
 import bodyParser from "body-parser";
 import handlebars from "express-handlebars";
+import swaggerJSDoc from "swagger-jsdoc";
+import { serve, setup } from "swagger-ui-express";
 import viewsUser from "./routes/viewsRoutes/userViewsRoute.js";
 import { LoggerDEV, LoggerPROD } from "./middlewares/loggerWinston.js";
 import {
@@ -21,16 +23,20 @@ import {
   errorLoggerPROD,
 } from "./middlewares/errorHandlerDefault.js";
 import viewsProduct from "./routes/viewsRoutes/productViewsRoute.js";
+import options from "./utils/swagger.js";
 
 const app = express();
 //CONEXON CON MONGOOSE ATLAS
 await mongoose.connect(config.MONGO_URL);
+//CONFIGURACION DE SWAGGER
+const specs = swaggerJSDoc(options);
 
 //MIDDLEWARES
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(cookieParser());
+app.use("/docs", serve, setup(specs));
 app.use(
   session({
     secret: config.SESSION_SECRET,

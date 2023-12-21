@@ -1,0 +1,74 @@
+components:
+  schemas:
+    create:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Nombre del producto
+        description:
+          type: string
+          description: Descripcion del producto a crear
+        price:
+          type: number
+          description: Precio del producto (expresado en pesos argentinos sin decimales)
+        thmbnail:
+          type: string
+          description: imagen miniatura del producto
+        code:
+          type: string
+          description: Codigo de control interno del producto
+        stock:
+          type: number
+          description: Cantidad disponible al momento de la inclusion del producto a la tienda
+        category:
+          type: string
+          description: Categoria del producto (Ej. Pantalones, remeras, accesorios, etc)
+      example:
+        title: Pantalon YHLQSMDLG
+        description: Pantalon en honor a Bad Bunny
+        price: 12560
+        thbnail: https://i.pinimg.com/736x/db/82/45/db8245cdf6e2885c02ecd8376416157b.jpg
+        code: P_0256
+        stock: 10
+        category: Pantalones
+  responses:
+    create:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Estado de la respuesta
+        message:
+          type: string
+          description: mensaje de la solicitud de creacion
+      example:
+        status: success
+        message: Producto creado correctamente
+
+paths:
+  /api/products:
+    post:
+      summary: Crear un producto
+      tags:
+        - Prodcuts
+      requestBody:
+        required: true
+        description: Objeto con los datos necesarios para la creacion de un nuevo producto para la tienda
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/create"
+      responses:
+        "201":
+          description: Exito en la creacion de un nuevo producto
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/create"
+        "400":
+          description: Error en la solicitud debido a datos incorrectos o incompletos
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/error"
