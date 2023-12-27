@@ -1,55 +1,73 @@
 //FORMULARIO DE LOGIN
 function formLogin() {
-  const obtencion = document.getElementById("formLogin");
+  document
+    .getElementById("formLogin")
+    .addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
 
-  obtencion.addEventListener("submit", async (event) => {
-    //event.preventDefault();
-    const info = new FormData(obtencion);
-    const data = {};
+      const infoLogin = {
+        email,
+        password,
+      };
 
-    info.forEach((valor, llave) => (data[llave] = valor));
-    console.log(data);
+      console.log(infoLogin);
 
-    const res = await fetch("users/login", {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: {
-        "Content-Type": "application/json",
-      },
+      const res = await fetch("http://localhost:8080/users/login", {
+        method: "POST",
+        body: JSON.stringify(infoLogin),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const resInfo = await res.json();
+      console.log(resInfo);
+      if (resInfo.error) {
+      }
+      localStorage.setItem("accessToken", resInfo.accessToken);
     });
-
-    const resInfo = await res.json();
-    console.log(resInfo);
-    if (resInfo.error) {
-    }
-    localStorage.setItem("accessToken", resInfo.accessToken);
-  });
 }
 
 //FORMULARIO DE REGISTRO
-function formRegister() {
-  const obtencionRegistro = document.getElementById("formRegister");
 
-  obtencionRegistro.addEventListener("submit", async (event) => {
-    //event.preventDefault();
-    const info = new FormData(obtencionRegistro);
-    const data = {};
+document
+  .getElementById("formRegister")
+  .addEventListener("submit", async (event) => {
+    event.preventDefault();
 
-    info.forEach((valor, llave) => (data[llave] = valor));
-    console.log(data);
+    const name = document.getElementById("name").value;
+    const lastname = document.getElementById("lastname").value;
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
 
-    const res = await fetch("http://localhost:8080/users/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
+    const infoUsers = {
+      name,
+      lastname,
+      email,
+      password,
+    };
 
-    const resInfo = await res.json();
-    console.log(resInfo);
-    if (resInfo.error) {
+    console.log(infoUsers);
+
+    try {
+      const res = await fetch("http://localhost:8080/users/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(infoUsers),
+      });
+
+      if (res.ok) {
+        const resInfo = await res.json();
+        console.log(resInfo);
+        localStorage.setItem("accessToken", resInfo.accessToken);
+      } else {
+        console.error("Error en la solicitud:", res.status, res.statusText);
+      }
+    } catch (error) {
+      console.error("Error en la solicitud:", error.message);
     }
-    localStorage.setItem("accessToken", resInfo.accessToken);
   });
-}

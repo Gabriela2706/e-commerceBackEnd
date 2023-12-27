@@ -14,14 +14,14 @@ const userRoute = Router();
 // );
 
 //login con estrategia local
-userRoute.post(
-  "/login",
-  passport.authenticate("login", {
-    successMessage: "Login Exitoso",
-    failureMessage: "Login Fallido",
-  }),
-  userController.postLogin
-);
+// userRoute.post(
+//   "/login",
+//   passport.authenticate("login", {
+//     successMessage: "Login Exitoso",
+//     failureMessage: "Login Fallido",
+//   }),
+//   userController.postLogin
+// );
 
 //Redirect al login con GitHub
 userRoute.get(

@@ -6,26 +6,35 @@ const viewsUser = Router();
 //Vista que renderiza el home segun el logueo
 viewsUser.get("/home", async (req, res) => {
   try {
-    switch (req.user) {
-      case "admin":
-        res.render("homeAdmin", { title: "Home | Hola Administrador!" });
-        break;
-      case "user":
-        res.render("homeUserLog", { title: "Home | Hola Usuario!" });
-        break;
-      case "premiun":
-        res.render("homePremiun", { title: "Home | Hola Usuario Premiun!" });
-        break;
-      case "visit":
-        res.render("bienvenida", { title: "Home | Hola!" });
-      default:
-        res.render("bienvenida", { title: "Home | Hola!" });
-        break;
-    }
+    res.render("bienvenida", { title: "Home | Hola!" });
+  } catch (error) {
+    res.render("error", { title: "Página no encontrada" });
+  }
+});
+
+viewsUser.get("/homeUserLog", async (req, res) => {
+  try {
+    res.render("homeUserLog", { title: "Home | Hola Usuario!" });
   } catch (error) {
     res.render("error", { title: "Pagina no encontrada" });
   }
 });
+viewsUser.get("/homeAdmin", async (req, res) => {
+  try {
+    res.render("homeAdming", { title: "Home |  Hola Administrador!" });
+  } catch (error) {
+    res.render("error", { title: "Pagina no encontrada" });
+  }
+});
+
+viewsUser.get("/homePremiun", async (req, res) => {
+  try {
+    res.render("homePremiun", { title: "Home |   Hola Usuario Premiun!" });
+  } catch (error) {
+    res.render("error", { title: "Pagina no encontrada" });
+  }
+});
+
 viewsUser.get("/login", async (req, res) => {
   try {
     res.render("login", { title: "Login" });
@@ -44,14 +53,20 @@ viewsUser.get("/register", async (req, res) => {
 
 viewsUser.post(
   "/register",
-  // passport.authenticate("register", {
-  //   successRedirect: " /users/login",
-  //   //failureRedirect: "/users/error",
-  //   failureMessage: "Error en la auth",
-  // }),
+  passport.authenticate("register", {
+    successRedirect: "/users/home",
+    failureRedirect: "/users/error",
+  }),
   userController.postRegister
 );
-
+viewsUser.post(
+  "/login",
+  // passport.authenticate("login", {
+  //   successMessage: "Login Exitoso",
+  //   failureMessage: "Login Fallido",
+  // }),
+  userController.postLogin
+);
 viewsUser.get("/error", async (req, res) => {
   try {
     res.render("error", { title: "Error en la pagina" });

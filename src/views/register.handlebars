@@ -3,26 +3,40 @@
     <div class="col">
       <form method="POST" id="formRegister">
         <div class="mb-3">
-          <label for="exampleInputPassword1" class="form-label">Nombre</label>
-          <input type="" class="form-control" />
+          <label for="name" class="form-label">Nombre</label>
+          <input type="text" class="form-control" name="name" id="name" />
         </div>
         <div class="mb-3">
-          <label for="exampleInputPassword1" class="form-label">Apellido</label>
-          <input type="" class="form-control" />
+          <label for="lastname" class="form-label">Apellido</label>
+          <input
+            type="text"
+            class="form-control"
+            name="lastname"
+            id="lastname"
+          />
         </div>
 
         <div class="mb-3">
 
-          <label for="exampleInputEmail1" class="form-label">Email</label>
-          <input type="email" class="form-control" />
+          <label for="email" class="form-label">Email</label>
+          <input type="email" class="form-control" name="email" id="email" />
 
         </div>
         <div class="mb-3">
-          <label for="exampleInputPassword1" class="form-label">Password</label>
-          <input type="password" class="form-control" />
+          <label for="password" class="form-label">Password</label>
+          <input
+            type="password"
+            class="form-control"
+            name="password"
+            id="password"
+          />
         </div>
 
-        <button type="submit" class="btn btn-primary">Registrarse</button>
+        <button
+          type="submit"
+          onclick="formRegister()"
+          class="btn btn-primary"
+        >Registrarse</button>
       </form>
     </div>
     <div class="col"></div>

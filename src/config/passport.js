@@ -2,9 +2,6 @@
 import passport from "passport";
 import local from "passport-local";
 import GithubStrategy from "passport-github2";
-import jwt from "passport-jwt";
-import { tokenCookie } from "./tokenCookie.js";
-import { SECRET } from "./jwt.js";
 import * as userService from "../services/userService.js";
 
 const initLocalStrategy = () => {
@@ -13,29 +10,45 @@ const initLocalStrategy = () => {
     "register",
     new local.Strategy(
       { passReqToCallback: true, usernameField: "email" },
-      async (req, email, password, next) => {
-        const emailExist = await userService.userExist(email);
-        if (emailExist) return "Email invalido";
+      async (req, email, password, done) => {
+        try {
+          const emailExist = await userService.userExist(email);
+          if (emailExist)
+            return done(null, false, "Email inválido o ya registrado");
 
-        const { body } = req.body;
-        const newUser = await userService.newRegister(body);
-        return next(null, newUser);
+          const newUser = await userService.newRegister(req.body);
+          console.log(newUser);
+          return done(null, newUser);
+        } catch (error) {
+          return done(error);
+        }
       }
     )
   );
+
   //LOGIN
   passport.use(
     "login",
     new local.Strategy(
       { passReqToCallback: true, usernameField: "email" },
-      async (req, email, password, next) => {
-        const login = await userService.loginStrategyLocal(email, password);
+      async (req, email, password, done) => {
+        try {
+          const login = await userService.loginStrategyLocal(email, password);
 
-        if (!login) return next("email y/o contraseña invalidos");
-        return next(null, login);
+          if (!login) {
+            return done(null, false, {
+              message: "Email y/o contraseña inválidos",
+            });
+          }
+          return done(null, login);
+        } catch (error) {
+          console.error(error.message);
+          return done(error);
+        }
       }
     )
   );
+
   //ESTRATEGIA DE GITHUB
   passport.use(
     "github",
@@ -46,54 +59,48 @@ const initLocalStrategy = () => {
         clientSecret: "04a5adc86c0ded9893b9168123dde497bf58d5fb",
         callbackURL: "http://localhost:8082/api/viewsUser/authgithub",
       },
-      async (accessToken, refreshToken, profile, next) => {
-        console.log(profile);
-        const email = profile._json.email;
-        const user = await userService.userExist(email);
+      async (accessToken, refreshToken, profile, done) => {
+        try {
+          const email = profile._json.email;
+          const user = await userService.userExist(email);
 
-        if (user) return next(null, user);
+          if (user) return done(null, user);
 
-        const createUser = await userService.newRegister({
-          name: profile._json.name,
-          lastName: profile._json.name,
-          email,
-          password: "",
-          role: (profile._json.email = "admincoder@coder.com"
-            ? "admin"
-            : "visit"),
-        });
+          const createUser = await userService.newRegister({
+            name: profile._json.name,
+            lastName: profile._json.name,
+            email,
+            password: "", // Considera generar una contraseña aleatoria aquí
+            role:
+              profile._json.email === "admincoder@coder.com"
+                ? "admin"
+                : "visit",
+          });
 
-        next(null, createUser);
+          done(null, createUser);
+        } catch (error) {
+          done(error);
+        }
       }
     )
   );
 
-  passport.use(
-    //ESTRATEGIA DE JWT
-    "current",
-    new jwt.Strategy(
-      {
-        jwtFromRequest: jwt.ExtractJwt.fromExtractors([tokenCookie]), //extraigo el token de las cookies
-        secretOrKey: SECRET,
-      },
-      async (payload, next) => {
-        console.log(payload);
-        const userSub = await userService.getUserByID(payload.sub);
-        if (!userSub) return next("Payload.sub no encontrado");
-        return next(null, userSub);
-      }
-    )
-  );
   passport.serializeUser((newUser, next) => {
-    next(null, newUser._id);
+    next(null, newUser.email);
   });
 
-  passport.deserializeUser(async (id, next) => {
+  passport.deserializeUser(async (email, next) => {
     try {
-      const user = await userService.getUserByID(id);
+      const user = await userService.userExist(email);
+
+      if (!user) {
+        return next("Usuario no encontrado");
+      }
+
       next(null, user);
     } catch (e) {
       console.log(e.message);
+      next(e);
     }
   });
 };

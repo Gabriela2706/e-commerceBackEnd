@@ -10,14 +10,20 @@ export default class UserDAO {
     }
   };
 
-  findOne = async (id) => {
+  findId = async (id) => {
     try {
-      return await userModel.findById({ _id: id });
+      return await userModel.findById(id);
     } catch (error) {
       console.log(error.message);
     }
   };
-
+  findOne = async (email) => {
+    try {
+      return await userModel.findOne({ email: email });
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
   create = async (data) => {
     try {
       let newUser = await userModel.create(data);

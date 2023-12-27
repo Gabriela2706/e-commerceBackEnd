@@ -12,7 +12,6 @@ import userRoute from "./routes/userRoute.js";
 import __dirname from "./dirname.js";
 import passport from "passport";
 import initLocalStrategy from "./config/passport.js";
-import bodyParser from "body-parser";
 import handlebars from "express-handlebars";
 import swaggerJSDoc from "swagger-jsdoc";
 import { serve, setup } from "swagger-ui-express";
@@ -24,6 +23,7 @@ import {
 } from "./middlewares/errorHandlerDefault.js";
 import viewsProduct from "./routes/viewsRoutes/productViewsRoute.js";
 import options from "./utils/swagger.js";
+import bodyParser from "body-parser";
 
 const app = express();
 //CONEXON CON MONGOOSE ATLAS
